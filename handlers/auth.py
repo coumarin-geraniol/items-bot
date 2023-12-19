@@ -5,7 +5,7 @@ from aiogram.fsm.state import default_state
 from aiogram.types import Message, ReplyKeyboardRemove
 from database.database import check_credentials_and_update_tg_id, is_user_registered
 from handlers.fsm import UserActions
-from keyboards.keyboards import get_main_kb, get_cancel_kb, get_login_kb, get_type_kb
+from keyboards.keyboards import get_cancel_kb, get_login_kb, get_type_kb
 
 router = Router()
 

@@ -2,8 +2,6 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment
 from datetime import datetime
 from database.database import get_user_info
-from openpyxl.styles import PatternFill, Border, Side, Font
-
 
 async def create_excel_file(user_id, cargo_id, cart_items, total_price):
     unique_time_str = datetime.now().strftime("%Y%m%d-%H%M%S")

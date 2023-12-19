@@ -4,7 +4,7 @@ from aiogram import F, Router, Bot
 from aiogram import types
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
-from aiogram.types import InputFile, FSInputFile
+from aiogram.types import FSInputFile
 
 from config import GROUP_ID
 from database.database import get_user_id, update_item_quantity_in_cart, \

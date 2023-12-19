@@ -5,12 +5,12 @@ from aiogram.enums import ParseMode
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import FSInputFile, InputMediaPhoto
-from database.database import get_all_items, get_one_item, get_user_id, get_user_cart, add_to_order, \
-    get_current_quantity, get_user_info, get_user_info_from_tg
+from database.database import get_all_items, get_one_item, get_user_cart, add_to_order, \
+    get_current_quantity, get_user_info_from_tg
+from global_vars import user_current_item, item_quantity, get_available_items_title
 from handlers.fsm import UserActions
 from handlers.main import get_type_name, format_number_with_spaces
-from keyboards.keyboards import get_main_kb, get_catalog_kb, get_quantity_kb, NumbersCallbackFactory, get_login_kb
-from global_vars import user_current_item, item_quantity, get_available_items_title
+from keyboards.keyboards import get_main_kb, get_catalog_kb, get_quantity_kb, NumbersCallbackFactory
 
 router = Router()
 
