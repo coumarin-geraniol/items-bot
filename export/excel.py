@@ -1,7 +1,8 @@
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
 from datetime import datetime
-from database.database import get_user_info
+from database.database import get_user_info, get_total_orders_count
+
 
 async def create_excel_file(user_id, cargo_id, cart_items, total_price):
     unique_time_str = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -29,7 +30,7 @@ async def create_excel_file(user_id, cargo_id, cart_items, total_price):
     for column, width in column_widths.items():
         ws.column_dimensions[column].width = width
 
-
+    order_no = get_total_orders_count(user_info['id'])
     # Добавляем данные по каждому товару
     for item in cart_items:
         ws.append([item['order_id'], item['name'], item['quantity'], item['price_per_item'], item['item_total_price']])
@@ -44,6 +45,6 @@ async def create_excel_file(user_id, cargo_id, cart_items, total_price):
             cell.alignment = Alignment(horizontal='center')
 
     # Сохраняем файл
-    filename = f"export/docs/cart_{cargo_id}-{unique_time_str}.xlsx"
+    filename = f"export/docs/{order_no}_order_{user_info['tg_username']}_.xlsx"
     wb.save(filename)
     return filename

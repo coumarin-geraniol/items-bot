@@ -133,6 +133,18 @@ def update_user_type(tg_id, type):
     """, (type, tg_id))
     db.commit()
 
+def get_total_orders_count(user_id):
+    # Подготовка SQL-запроса для подсчета количества заказов пользователя
+    query = """
+        SELECT COUNT(*) FROM cargos WHERE user_id = ?
+    """
+
+    # Выполнение запроса и получение результата
+    cur.execute(query, (user_id,))
+    result = cur.fetchone()
+
+    # Возвращаем количество заказов или 0, если результат отсутствует
+    return result[0] if result else 0
 
 async def get_user_id(tg_id):
     user = cur.execute("SELECT * FROM users WHERE tg_id == {key}".format(key=tg_id)).fetchone()
@@ -246,6 +258,7 @@ def get_user_cart(user_id):
         i.desc,
         i.box_qty,
         i.bag_qty,
+        i.code,
         COALESCE(p.new_price, i.price) AS price
     FROM 
         orders o
@@ -266,7 +279,7 @@ def get_user_cart(user_id):
     cart_items = []
     total_price = 0
     for item in cart_items_raw:
-        order_id, quantity, order_type, item_id, name, dimension, desc, box_qty, bag_qty, price = item
+        order_id, quantity, order_type, item_id, name, dimension, desc, box_qty, bag_qty, code, price = item
         item_total_price = box_qty * quantity * price if order_type == 1 else bag_qty * quantity * price
 
         # Добавление информации о каждом товаре
@@ -279,6 +292,7 @@ def get_user_cart(user_id):
             'name': name,
             'dimension': dimension,
             'desc': desc,
+            'code': code,
             'price_per_item': price,
             'item_total_price': item_total_price,
             'quantity': quantity

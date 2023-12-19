@@ -39,15 +39,20 @@ async def handle_item_selection(message: types.Message):
 
     items_per_pack = item['item_box_qty'] if user_info['type'] == 1 else item['item_bag_qty']
     item_total_price = item_quantity[message.from_user.id] * item['item_price'] * items_per_pack
+    price_per_box = item['item_price'] * items_per_pack
+    item_total_dimension = item['item_dimension'] * items_per_pack * item_quantity[message.from_user.id]
 
     response = f"<b>Name:</b> {item['name']}\n"
-    response += f"<b>Items per {get_type_name(user_info['type']).capitalize()}:</b> {items_per_pack}\n" \
-                f"<b>Dimension:</b> {item['item_dimension']}m3\n" \
-                f"<b>Price per Item:</b> ${format_number_with_spaces(item['item_price'])}\n\n" \
-                f"<b>Quantity of {get_type_name(user_info['type']).capitalize()}:</b> {item_quantity[message.from_user.id]}\n" \
-                f"<b>Total Price for Item:</b> ${format_number_with_spaces(item_total_price)}\n"
-    response += f"\n{item['item_description']}\n"
-    response += f"\n<b>Packaging type:</b> {get_type_name(user_info['type'])}"
+    response += f"Code: {item['item_code']}\n" \
+                f"<b>Price per {get_type_name(user_info['type']).capitalize()}:</b> {format_number_with_spaces(price_per_box)}\n\n" \
+    \
+                f"<b>Packaging type:</b> {get_type_name(user_info['type'])}\n" \
+                f"<b>Volume per item:</b> {item['item_dimension']}m3\n" \
+                f"<b>Total Volume:</b> {item_total_dimension}m3\n\n" \
+    \
+                f"<b>Items per box:</b> ${items_per_pack}\n" \
+                f"<b>Total {get_type_name(user_info['type']).capitalize()}:</b> ${item_quantity[message.from_user.id]}\n" \
+                f"<b>Total Price:</b> ${format_number_with_spaces(item_total_price)}\n" \
 
 
     await message.answer_photo(photo=photo,
@@ -62,19 +67,24 @@ async def update_num_text_quantity(message: types.Message, new_value: int, item,
 
         items_per_pack = item['item_box_qty'] if user_info['type'] == 1 else item['item_bag_qty']
         item_total_price = new_value * item['item_price'] * items_per_pack
+        price_per_box = item['item_price'] * items_per_pack
+        item_total_dimension = item['item_dimension'] * items_per_pack * item_quantity[message.from_user.id]
 
         response = f"<b>Name:</b> {item['name']}\n"
-        response += f"<b>Items per {get_type_name(user_info['type']).capitalize()}:</b> {items_per_pack}\n" \
-                    f"<b>Dimension:</b> {item['item_dimension']}m3\n" \
-                    f"<b>Price per Item:</b> ${format_number_with_spaces(item['item_price'])}\n\n" \
-                    f"<b>Quantity of {get_type_name(user_info['type']).capitalize()}:</b> {new_value}\n" \
-                    f"<b>Total Price for Item:</b> ${format_number_with_spaces(item_total_price)}\n"
-        response += f"\n{item['item_description']}\n"
-        response += f"\n<b>Packaging type:</b> {get_type_name(user_info['type'])}"
+        response += f"Code: {item['item_code']}\n" \
+                    f"<b>Price per {get_type_name(user_info['type']).capitalize()}:</b> {format_number_with_spaces(price_per_box)}\n\n" \
+ \
+                    f"<b>Packaging type:</b> {get_type_name(user_info['type'])}\n" \
+                    f"<b>Volume per item:</b> {item['item_dimension']}m3\n" \
+                    f"<b>Total Volume:</b> {item_total_dimension}m3\n\n" \
+ \
+                    f"<b>Items per box:</b> ${items_per_pack}\n" \
+                    f"<b>Total {get_type_name(user_info['type']).capitalize()}:</b> ${item_quantity[message.from_user.id]}\n" \
+                    f"<b>Total Price:</b> ${format_number_with_spaces(item_total_price)}\n"
 
         await message.edit_caption(caption=response,
-                                   parse_mode=ParseMode.HTML,
-                                   reply_markup=kb_quantity)
+                           parse_mode=ParseMode.HTML,
+                           reply_markup=kb_quantity)
 
 
 @router.callback_query(NumbersCallbackFactory.filter(), UserActions.is_catalog)
@@ -118,13 +128,15 @@ async def callbacks_num_change_fab(
             items_per_pack = item['box_qty'] if item['order_type'] == 1 else item['bag_qty']
             total_packs = item['quantity']
             total_items = items_per_pack * total_packs
+            item_total_dimension = item['dimension'] * items_per_pack * item['quantity']
 
-            response += f"* <b>Name:</b> {item['name']}\n" \
-                        f"    <b>Items per {get_type_name(item['order_type']).capitalize()}:</b> {items_per_pack}\n" \
-                        f"    <b>Total Packs:</b> {total_packs}\n" \
-                        f"    <b>Total Items:</b> {total_items}\n" \
-                        f"    <b>Price per Item:</b> ${format_number_with_spaces(item['price_per_item'])}\n" \
-                        f"    <b>Total Price for Item:</b> ${format_number_with_spaces(item['item_total_price'])}\n" \
+            response += f"* <b>Name:</b> {item['name']} - {item['code']}\n" \
+                        f"   <b>Total Volume:</b> {item_total_dimension}\n" \
+                        f"   <b>Items per {get_type_name(item['order_type']).capitalize()}:</b> {items_per_pack}\n" \
+                        f"   <b>Total Packs:</b> {total_packs}\n" \
+                        f"   <b>Total Items:</b> {total_items}\n" \
+                        f"   <b>Price per Item:</b> ${format_number_with_spaces(item['price_per_item'])}\n" \
+                        f"   <b>Total Price for Item:</b> ${format_number_with_spaces(item['item_total_price'])}\n" \
                         f"\n"
 
         response += f"\n<b>Total Cart Value:</b> ${format_number_with_spaces(total_price)}"
