@@ -44,13 +44,13 @@ async def handle_item_selection(message: types.Message):
 
     response = f"<b>Name:</b> {item['name']}\n"
     response += f"Code: {item['item_code']}\n" \
-                f"<b>Price per {get_type_name(user_info['type']).capitalize()}:</b> {format_number_with_spaces(price_per_box)}\n\n" \
+                f"<b>Price per {get_type_name(user_info['type']).capitalize()}:</b> ${format_number_with_spaces(price_per_box)}\n\n" \
     \
                 f"<b>Packaging type:</b> {get_type_name(user_info['type'])}\n" \
                 f"<b>Volume per item:</b> {item['item_dimension']}m3\n" \
                 f"<b>Total Volume:</b> {item_total_dimension}m3\n\n" \
     \
-                f"<b>Items per box:</b> ${items_per_pack}\n" \
+                f"<b>Items per box:</b> {items_per_pack}\n" \
                 f"<b>Total {get_type_name(user_info['type']).capitalize()}:</b> ${item_quantity[message.from_user.id]}\n" \
                 f"<b>Total Price:</b> ${format_number_with_spaces(item_total_price)}\n" \
 
@@ -68,17 +68,17 @@ async def update_num_text_quantity(message: types.Message, new_value: int, item,
         items_per_pack = item['item_box_qty'] if user_info['type'] == 1 else item['item_bag_qty']
         item_total_price = new_value * item['item_price'] * items_per_pack
         price_per_box = item['item_price'] * items_per_pack
-        item_total_dimension = item['item_dimension'] * items_per_pack * item_quantity[message.from_user.id]
+        item_total_dimension = item['item_dimension'] * items_per_pack * new_value
 
         response = f"<b>Name:</b> {item['name']}\n"
         response += f"Code: {item['item_code']}\n" \
-                    f"<b>Price per {get_type_name(user_info['type']).capitalize()}:</b> {format_number_with_spaces(price_per_box)}\n\n" \
+                    f"<b>Price per {get_type_name(user_info['type']).capitalize()}:</b> ${format_number_with_spaces(price_per_box)}\n\n" \
  \
                     f"<b>Packaging type:</b> {get_type_name(user_info['type'])}\n" \
                     f"<b>Volume per item:</b> {item['item_dimension']}m3\n" \
                     f"<b>Total Volume:</b> {item_total_dimension}m3\n\n" \
  \
-                    f"<b>Items per box:</b> ${items_per_pack}\n" \
+                    f"<b>Items per box:</b> {items_per_pack}\n" \
                     f"<b>Total {get_type_name(user_info['type']).capitalize()}:</b> ${item_quantity[message.from_user.id]}\n" \
                     f"<b>Total Price:</b> ${format_number_with_spaces(item_total_price)}\n"
 
