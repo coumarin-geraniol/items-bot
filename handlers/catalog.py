@@ -131,7 +131,7 @@ async def callbacks_num_change_fab(
             item_total_dimension = item['dimension'] * items_per_pack * item['quantity']
 
             response += f"* <b>Name:</b> {item['name']} - {item['code']}\n" \
-                        f"   <b>Total Volume:</b> {item_total_dimension}\n" \
+                        f"   <b>Total Volume:</b> {item_total_dimension}m3\n" \
                         f"   <b>Items per {get_type_name(item['order_type']).capitalize()}:</b> {items_per_pack}\n" \
                         f"   <b>Total Packs:</b> {total_packs}\n" \
                         f"   <b>Total Items:</b> {total_items}\n" \
