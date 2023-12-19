@@ -1,0 +1,3 @@
+TOKEN = '6888650366:AAFCnWFUzWNUfsCTgwzdsgw4yxVVUS6ZRyo'  #bot token from @BotFather
+ID: int = 6196132184
+GROUP_ID: int = -1002028033720
