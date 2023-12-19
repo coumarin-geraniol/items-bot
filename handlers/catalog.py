@@ -79,7 +79,7 @@ async def update_num_text_quantity(message: types.Message, new_value: int, item,
                     f"<b>Total Volume:</b> {item_total_dimension}m3\n\n" \
  \
                     f"<b>Items per box:</b> {items_per_pack}\n" \
-                    f"<b>Total {get_type_name(user_info['type']).capitalize()}:</b> ${item_quantity[message.from_user.id]}\n" \
+                    f"<b>Total {get_type_name(user_info['type']).capitalize()}:</b> ${new_value}\n" \
                     f"<b>Total Price:</b> ${format_number_with_spaces(item_total_price)}\n"
 
         await message.edit_caption(caption=response,
