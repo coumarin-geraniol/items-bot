@@ -47,8 +47,8 @@ async def handle_item_selection(message: types.Message):
                 f"<b>Price per {get_type_name(user_info['type']).capitalize()}:</b> ${format_number_with_spaces(price_per_box)}\n\n" \
     \
                 f"<b>Packaging type:</b> {get_type_name(user_info['type'])}\n" \
-                f"<b>Volume per item:</b> {item['item_dimension']}m3\n" \
-                f"<b>Total Volume:</b> {item_total_dimension}m3\n\n" \
+                f"<b>Volume per item:</b> {format_number_with_spaces(item['item_dimension'])}m3\n" \
+                f"<b>Total Volume:</b> {format_number_with_spaces(item_total_dimension)}m3\n\n" \
     \
                 f"<b>Items per box:</b> {items_per_pack}\n" \
                 f"<b>Total {get_type_name(user_info['type']).capitalize()}:</b> {item_quantity[message.from_user.id]}\n" \
@@ -75,8 +75,8 @@ async def update_num_text_quantity(message: types.Message, new_value: int, item,
                     f"<b>Price per {get_type_name(user_info['type']).capitalize()}:</b> ${format_number_with_spaces(price_per_box)}\n\n" \
  \
                     f"<b>Packaging type:</b> {get_type_name(user_info['type'])}\n" \
-                    f"<b>Volume per item:</b> {item['item_dimension']}m3\n" \
-                    f"<b>Total Volume:</b> {item_total_dimension}m3\n\n" \
+                    f"<b>Volume per item:</b> {format_number_with_spaces(item['item_dimension'])}m3\n" \
+                    f"<b>Total Volume:</b> {format_number_with_spaces(item_total_dimension)}m3\n\n" \
  \
                     f"<b>Items per box:</b> {items_per_pack}\n" \
                     f"<b>Total {get_type_name(user_info['type']).capitalize()}:</b> {new_value}\n" \
@@ -131,7 +131,7 @@ async def callbacks_num_change_fab(
             item_total_dimension = item['dimension'] * items_per_pack * item['quantity']
 
             response += f"* <b>Name:</b> {item['name']} - {item['code']}\n" \
-                        f"   <b>Total Volume:</b> {item_total_dimension}m3\n" \
+                        f"   <b>Total Volume:</b> {format_number_with_spaces(item_total_dimension)}m3\n" \
                         f"   <b>Items per {get_type_name(item['order_type']).capitalize()}:</b> {items_per_pack}\n" \
                         f"   <b>Total Packs:</b> {total_packs}\n" \
                         f"   <b>Total Items:</b> {total_items}\n" \

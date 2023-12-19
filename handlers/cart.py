@@ -11,7 +11,7 @@ from database.database import get_user_id, update_item_quantity_in_cart, \
     get_order_quantity, finalize_order, get_user_info_from_tg
 from export.excel import create_excel_file
 from handlers.fsm import UserActions
-from handlers.main import get_type_name_grammar
+from handlers.main import get_type_name_grammar, format_number_with_spaces
 from keyboards.keyboards import get_main_kb, get_cart_kb, ItemsCallbackFactory
 from database.database import get_user_cart
 
@@ -31,10 +31,10 @@ async def cmd_cart(message: types.Message, state: FSMContext):
             total_item_qty = items_per_pack * item['quantity']
             response += f"<b>{item['name']} - </b>" \
                         f"{item['quantity']} {get_type_name_grammar(item['order_type'], item['quantity']).capitalize()} " \
-                        f"({total_item_qty} items at {item['price_per_item']}$ each) - " \
-                        f"Total: ${item['item_total_price']}\n"
-        response += f"\n<b>Total volume: {total_dimension}</b>"
-        response += f"\n<b>Total price: {total_price}</b>"
+                        f"({total_item_qty} items at {format_number_with_spaces(item['price_per_item'])}$ each) - " \
+                        f"Total: ${format_number_with_spaces(item['item_total_price'])}\n"
+        response += f"\n<b>Total volume: {format_number_with_spaces(total_dimension)}</b>"
+        response += f"\n<b>Total price: {format_number_with_spaces(total_price)}</b>"
         await message.answer(response, parse_mode='HTML', reply_markup=get_cart_kb(cart_items))
         await state.set_state(UserActions.is_cart)
 
@@ -52,11 +52,11 @@ async def update_cart_text(message: types.Message, user_id):
                 total_item_qty = items_per_pack * item['quantity']
                 response += f"<b>{item['name']} - </b>" \
                             f"{item['quantity']} {get_type_name_grammar(item['order_type'], item['quantity']).capitalize()} " \
-                            f"({total_item_qty} items at {item['price_per_item']}$ each) - " \
-                            f"Total: ${item['item_total_price']}\n"
+                            f"({total_item_qty} items at {format_number_with_spaces(item['price_per_item'])}$ each) - " \
+                            f"Total: ${format_number_with_spaces(item['item_total_price'])}\n"
 
-            response += f"\n<b>Total volume: {total_dimension}</b>"
-            response += f"\n<b>Total price: {total_price}</b>"
+            response += f"\n<b>Total volume: {format_number_with_spaces(total_dimension)}</b>"
+            response += f"\n<b>Total price: {format_number_with_spaces(total_price)}</b>"
             await message.edit_text(response, parse_mode='HTML', reply_markup=get_cart_kb(cart_items))
 
 
