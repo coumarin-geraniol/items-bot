@@ -278,9 +278,13 @@ def get_user_cart(user_id):
     # Подготовка списка словарей для товаров в корзине
     cart_items = []
     total_price = 0
+    total_dimension = 0
     for item in cart_items_raw:
         order_id, quantity, order_type, item_id, name, dimension, desc, box_qty, bag_qty, code, price = item
         item_total_price = box_qty * quantity * price if order_type == 1 else bag_qty * quantity * price
+
+        items_per_pack = box_qty if order_type == 1 else bag_qty
+        item_total_dimension = dimension * items_per_pack * quantity
 
         # Добавление информации о каждом товаре
         cart_item = {
@@ -291,6 +295,7 @@ def get_user_cart(user_id):
             'bag_qty': bag_qty,
             'name': name,
             'dimension': dimension,
+            'item_total_dimension': item_total_dimension,
             'desc': desc,
             'code': code,
             'price_per_item': price,
@@ -300,9 +305,10 @@ def get_user_cart(user_id):
         cart_items.append(cart_item)
 
         # Добавление стоимости товара к общей стоимости
+        total_dimension += item_total_dimension
         total_price += item_total_price
 
-    return cart_items, total_price
+    return cart_items, total_price, total_dimension
 
 
 def get_order_quantity(order_id: int) -> int:

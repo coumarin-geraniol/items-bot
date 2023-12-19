@@ -122,7 +122,7 @@ async def callbacks_num_change_fab(
         #         reply_markup=get_login_kb()
         #     )
         #     return await callback.answer("User not found")
-        cart_items, total_price = get_user_cart(user_id)
+        cart_items, total_price, total_dimension = get_user_cart(user_id)
         response = f"<b>Your Cart:</b>\n\n"
         for item in cart_items:
             items_per_pack = item['box_qty'] if item['order_type'] == 1 else item['bag_qty']

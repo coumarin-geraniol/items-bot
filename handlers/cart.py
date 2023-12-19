@@ -21,7 +21,7 @@ router = Router()
 @router.message(F.text == 'Cart', UserActions.is_type)
 async def cmd_cart(message: types.Message, state: FSMContext):
     user_id = await get_user_id(message.from_user.id)
-    cart_items, total_price = get_user_cart(user_id)
+    cart_items, total_price, total_dimension = get_user_cart(user_id)
     if not cart_items:
         await message.answer('Cart is empty.', reply_markup=get_main_kb())
     else:
@@ -33,6 +33,7 @@ async def cmd_cart(message: types.Message, state: FSMContext):
                         f"{item['quantity']} {get_type_name_grammar(item['order_type'], item['quantity']).capitalize()} " \
                         f"({total_item_qty} items at {item['price_per_item']}$ each) - " \
                         f"Total: ${item['item_total_price']}\n"
+        response += f"\n<b>Total volume: {total_dimension}</b>"
         response += f"\n<b>Total price: {total_price}</b>"
         await message.answer(response, parse_mode='HTML', reply_markup=get_cart_kb(cart_items))
         await state.set_state(UserActions.is_cart)
@@ -40,7 +41,7 @@ async def cmd_cart(message: types.Message, state: FSMContext):
 
 async def update_cart_text(message: types.Message, user_id):
     with suppress(TelegramBadRequest):
-        cart_items, total_price = get_user_cart(user_id)
+        cart_items, total_price, total_dimension = get_user_cart(user_id)
         if not cart_items:
             await message.edit_text('Cart is empty.')
             await message.answer("Redirecting to main page", reply_markup=get_main_kb())
@@ -54,6 +55,7 @@ async def update_cart_text(message: types.Message, user_id):
                             f"({total_item_qty} items at {item['price_per_item']}$ each) - " \
                             f"Total: ${item['item_total_price']}\n"
 
+            response += f"\n<b>Total volume: {total_dimension}</b>"
             response += f"\n<b>Total price: {total_price}</b>"
             await message.edit_text(response, parse_mode='HTML', reply_markup=get_cart_kb(cart_items))
 
@@ -71,7 +73,7 @@ async def callbacks_num_change_cart(
     order_id = callback_data.order_id
     current_quantity = get_order_quantity(order_id)  # функция для получения текущего количества
 
-    cart_items, total_price = get_user_cart(user_id)
+    cart_items, total_price, total_dimension = get_user_cart(user_id)
 
     if callback_data.action == "change" and callback_data.value is not None:
         new_quantity = max(current_quantity + callback_data.value, 0)
