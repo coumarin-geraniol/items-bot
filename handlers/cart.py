@@ -6,7 +6,7 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import FSInputFile
 
-from config import GROUP_ID
+from config import GROUP_ID, EXPORT_ID
 from database.database import get_user_id, update_item_quantity_in_cart, \
     get_order_quantity, finalize_order, get_user_info_from_tg
 from export.excel import create_excel_file
@@ -89,6 +89,8 @@ async def callbacks_num_change_cart(
 
         excel_file = FSInputFile(filename)
         await bot.send_document(chat_id=GROUP_ID, document=excel_file,
+                                caption=f"Order from @{user_info['tg_username']}")
+        await bot.send_document(chat_id=EXPORT_ID, document=excel_file,
                                 caption=f"Order from @{user_info['tg_username']}")
 
         await callback.message.edit_text("Your order has been received and sent to the administrators.")
